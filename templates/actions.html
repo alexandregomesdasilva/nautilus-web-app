@@ -41,10 +41,13 @@ content %}
   const cards = document.querySelectorAll(".action-card");
   const noResults = document.getElementById("no-results");
 
+  // À chaque frappe dans la barre de recherche, on filtre les cartes
   search.addEventListener("input", () => {
     const query = search.value.toLowerCase();
     let visible = 0;
 
+    // Pour chaque carte, on compare la saisie avec l'attribut data-search
+    // qui regroupe le nom, ticker, secteur et pays de l'action
     cards.forEach((card) => {
       const data = card.dataset.search.toLowerCase();
       if (data.includes(query)) {
@@ -54,7 +57,7 @@ content %}
         card.style.display = "none";
       }
     });
-
+    // On affiche le message "aucun résultat" uniquement si aucune carte n'est visible
     noResults.classList.toggle("hidden", visible > 0);
   });
 </script>

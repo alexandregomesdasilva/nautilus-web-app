@@ -90,6 +90,8 @@ block content %}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+  // On extrait les dates et les NAV depuis les données Flask via le filtre tojson,
+  // ce qui les rend utilisables directement comme tableaux JavaScript.
   const labels = {{ performances | map(attribute='date') | list | tojson }};
   const data = {{ performances | map(attribute='nav') | list | tojson }};
 
@@ -97,13 +99,15 @@ block content %}
     type: 'line',
     data: {
       labels: labels,
+      // datasets est un tableau : on pourrait y ajouter d'autres séries
+      // pour comparer plusieurs fonds sur le même graphique
       datasets: [{
-        label: 'NAV',
+        label: 'NAV', // nom affiché dans le tooltip au survol
         data: data,
-        borderColor: '#1a3c6e',
-        backgroundColor: 'rgba(26, 60, 110, 0.1)',
-        tension: 0.3,
-        fill: true
+        borderColor: '#1a3c6e', // couleur de la ligne (bleu Nautilus)
+        backgroundColor: 'rgba(26, 60, 110, 0.1)', // même couleur avec opacité pour le remplissage
+        tension: 0.3, // légère courbure des lignes
+        fill: true // colorie la zone sous la courbe
       }]
     },
     options: {
@@ -111,6 +115,8 @@ block content %}
     scales: {
         x: {
             ticks: {
+                // On tronque à 10 caractères pour afficher uniquement la date (YYYY-MM-DD)
+                // et ignorer l'heure si elle est présente dans le timestamp
                 callback: function(value, index) {
                     return labels[index].toString().slice(0, 10);
                 }

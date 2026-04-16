@@ -7,6 +7,7 @@ actions_bp = Blueprint("actions", __name__)
 def liste_actions():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
+    # On récupère toutes les actions disponibles en base
     cursor.execute("SELECT * FROM actions")
     actions = cursor.fetchall()
     cursor.close()

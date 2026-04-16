@@ -24,7 +24,9 @@ def detail_fonds(id):
     cursor.execute("SELECT * FROM fonds WHERE id = %s", (id,))
     fond = cursor.fetchone()  # fetchone() car on veut UN seul résultat
 
-    # La composition avec un JOIN
+    # La table composition stocke uniquement les IDs et les poids.
+    # Le JOIN avec actions permet de récupérer le nom, ticker et secteur
+    # de chaque action contenue dans le fonds.
     cursor.execute("""
         SELECT actions.nom, actions.ticker, actions.secteur, composition.poids
         FROM composition
@@ -33,7 +35,8 @@ def detail_fonds(id):
     """, (id,))
     composition = cursor.fetchall()
 
-    # Les performances
+    # On récupère l'historique des NAV de ce fonds, triées du plus ancien
+    # au plus récent pour pouvoir les afficher chronologiquement (ex: graphique).
     cursor.execute("""
         SELECT date, nav FROM performances
         WHERE fund_id = %s
@@ -55,10 +58,11 @@ def export_fonds(id):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # On récupère la composition du fonds
+    # Même JOIN que dans detail_fonds, mais on récupère en plus
+    # pays et prix — des colonnes utiles dans le CSV mais pas affichées sur la page de détail.
     cursor.execute("""
-        SELECT actions.nom, actions.ticker, actions.secteur, 
-               actions.pays, actions.prix, composition.poids
+        SELECT actions.nom, actions.ticker, actions.secteur,
+        actions.pays, actions.prix, composition.poids
         FROM composition
         JOIN actions ON composition.action_id = actions.id
         WHERE composition.fund_id = %s

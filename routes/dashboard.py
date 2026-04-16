@@ -40,6 +40,7 @@ def dashboard():
     conn.close()
 
     # Calculs globaux pour les KPIs
+    # On utilise des generator expressions pour sommer les valeurs de chaque fonds à la volée
     aum_total = sum(fond["aum"] for fond in fonds)
     rendement_moyen = round(sum(fond["rendement"] for fond in fonds) / len(fonds), 2)
 

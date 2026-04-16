@@ -20,7 +20,7 @@ Application web de visualisation et d'analyse de portefeuilles d'actions.
 ### 1. Cloner le projet
 
 ```bash
-git clone https://github.com/AlexandreGomesDaSilva/nautilus-app.git
+git clone https://github.com/AlexandreGomesDaSilva/nautilus-web-app.git
 cd nautilus-app
 ```
 
