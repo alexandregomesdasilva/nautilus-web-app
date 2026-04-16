@@ -1,0 +1,62 @@
+{% extends "base.html" %} {% block title %}- Actions{% endblock %} {% block
+content %}
+<h1 class="text-3xl font-bold mb-2">Liste des Actions</h1>
+<p class="text-gray-500 mb-6">{{ actions | length }} actions disponibles</p>
+
+<!-- Barre de recherche -->
+<input
+  id="search"
+  type="text"
+  placeholder="Rechercher par nom, ticker, secteur, pays..."
+  class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-900"
+/>
+
+<div id="actions-list" class="grid grid-cols-1 gap-4">
+  {% for action in actions %}
+  <div
+    class="action-card bg-white rounded-xl shadow p-6 flex justify-between items-center"
+    data-search="{{ action.nom }} {{ action.ticker }} {{ action.secteur }} {{ action.pays }}"
+  >
+    <div>
+      <h2 class="text-xl font-semibold">{{ action.nom }}</h2>
+      <p class="text-gray-500 text-sm">
+        {{ action.ticker }} — {{ action.pays }}
+      </p>
+      <p class="text-gray-500 text-sm">{{ action.secteur }}</p>
+    </div>
+    <div class="text-right">
+      <p class="text-lg font-bold">{{ action.prix }} EUR</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Message si aucun résultat -->
+<p id="no-results" class="text-center text-gray-400 mt-8 hidden">
+  Aucune action trouvée.
+</p>
+
+<script>
+  const search = document.getElementById("search");
+  const cards = document.querySelectorAll(".action-card");
+  const noResults = document.getElementById("no-results");
+
+  search.addEventListener("input", () => {
+    const query = search.value.toLowerCase();
+    let visible = 0;
+
+    cards.forEach((card) => {
+      const data = card.dataset.search.toLowerCase();
+      if (data.includes(query)) {
+        card.style.display = "flex";
+        visible++;
+      } else {
+        card.style.display = "none";
+      }
+    });
+
+    noResults.classList.toggle("hidden", visible > 0);
+  });
+</script>
+
+{% endblock %}

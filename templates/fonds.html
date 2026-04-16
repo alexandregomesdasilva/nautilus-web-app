@@ -1,0 +1,25 @@
+{% extends "base.html" %} {% block title %}- Fonds{% endblock %} {% block
+content %}
+<h1 class="text-3xl font-bold mb-6">Mes Fonds</h1>
+
+<div class="grid grid-cols-1 gap-4">
+  {% for fond in fonds %}
+  <div class="bg-white rounded-xl shadow p-6 flex justify-between items-center">
+    <div>
+      <h2 class="text-xl font-semibold">{{ fond.nom }}</h2>
+      <p class="text-gray-500 text-sm">{{ fond.isin }}</p>
+    </div>
+    <div class="text-right">
+      <p class="text-lg font-bold">
+        {{ "{:,.0f}".format(fond.aum) }} {{ fond.devise }}
+      </p>
+      <a
+        href="/fonds/{{ fond.id }}"
+        class="text-blue-600 hover:underline text-sm"
+        >Voir le détail →</a
+      >
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %} {% block title %}- Dashboard{% endblock %} {% block
+content %}
+<h1 class="text-3xl font-bold mb-2">Dashboard</h1>
+<p class="text-gray-500 mb-8">Vue d'ensemble de tous les fonds</p>
+
+<!-- KPIs globaux -->
+<div class="grid grid-cols-3 gap-4 mb-8">
+  <div class="bg-white rounded-xl shadow p-6 text-center">
+    <p class="text-gray-500 text-sm">Nombre de fonds</p>
+    <p class="text-4xl font-bold text-blue-900">{{ fonds | length }}</p>
+  </div>
+  <div class="bg-white rounded-xl shadow p-6 text-center">
+    <p class="text-gray-500 text-sm">AUM Total</p>
+    <p class="text-4xl font-bold text-blue-900">
+      {{ "{:,.0f}".format(aum_total) }} EUR
+    </p>
+  </div>
+  <div class="bg-white rounded-xl shadow p-6 text-center">
+    <p class="text-gray-500 text-sm">Rendement moyen</p>
+    <p class="text-4xl font-bold text-blue-900">{{ rendement_moyen }}%</p>
+  </div>
+</div>
+
+<!-- Tableau des fonds -->
+<div class="bg-white rounded-xl shadow overflow-hidden">
+  <table class="w-full">
+    <thead class="bg-blue-900 text-white">
+      <tr>
+        <th class="text-left p-4">Fonds</th>
+        <th class="text-left p-4">ISIN</th>
+        <th class="text-right p-4">AUM</th>
+        <th class="text-right p-4">NAV actuelle</th>
+        <th class="text-right p-4">Rendement</th>
+        <th class="text-right p-4"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for fond in fonds %}
+      <tr class="border-b last:border-0 hover:bg-gray-50">
+        <td class="p-4 font-semibold">{{ fond.nom }}</td>
+        <td class="p-4 text-gray-500 text-sm">{{ fond.isin }}</td>
+        <td class="p-4 text-right">
+          {{ "{:,.0f}".format(fond.aum) }} {{ fond.devise }}
+        </td>
+        <td class="p-4 text-right">{{ fond.nav_actuelle }}</td>
+        <td
+          class="p-4 text-right font-bold {% if fond.rendement > 0 %}text-green-600{% else %}text-red-600{% endif %}"
+        >
+          {% if fond.rendement > 0 %}+{% endif %}{{ fond.rendement }}%
+        </td>
+        <td class="p-4 text-right">
+          <a
+            href="/fonds/{{ fond.id }}"
+            class="text-blue-600 hover:underline text-sm"
+            >Détail →</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
