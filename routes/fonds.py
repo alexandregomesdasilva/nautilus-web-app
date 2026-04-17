@@ -9,6 +9,7 @@ fonds_bp = Blueprint("fonds", __name__)
 def liste_fonds():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
+    # On récupère tous les fonds disponibles en base
     cursor.execute("SELECT * FROM fonds")
     fonds = cursor.fetchall()
     cursor.close()
@@ -73,9 +74,19 @@ def export_fonds(id):
     conn.close()
 
     # On crée le CSV en mémoire
+    # io.StringIO() crée un faux fichier en mémoire (pas sur le disque)
+    # On écrit dedans comme un vrai fichier, mais tout reste dans la RAM
     output = io.StringIO()
+
+    # DictWriter transforme nos dicos Python en lignes CSV
+    # fieldnames définit les colonnes et leur ordre dans le fichier final
+    # delimiter=';' utilise le point-virgule comme séparateur (standard Excel en France)
     writer = csv.DictWriter(output, fieldnames=["nom", "ticker", "secteur", "pays", "prix", "poids"], delimiter=';')
+
+    # Écrit la première ligne d'en-tête : nom;ticker;secteur;pays;prix;poids
     writer.writeheader()
+
+    # Parcourt chaque dico dans composition et écrit une ligne CSV par action
     writer.writerows(composition)
 
     # On retourne le CSV comme fichier téléchargeable

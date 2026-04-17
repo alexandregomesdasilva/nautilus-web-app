@@ -98,12 +98,12 @@ block content %}
   new Chart(document.getElementById('navChart'), {
     type: 'line',
     data: {
-      labels: labels,
+      labels: labels, // les dates sur l'axe X
       // datasets est un tableau : on pourrait y ajouter d'autres séries
       // pour comparer plusieurs fonds sur le même graphique
       datasets: [{
-        label: 'NAV', // nom affiché dans le tooltip au survol
-        data: data,
+        label: 'NAV', // nom affiché dans le tooltip au survol de la courbe
+        data: data, // les valeurs de NAV sur l'axe Y
         borderColor: '#1a3c6e', // couleur de la ligne (bleu Nautilus)
         backgroundColor: 'rgba(26, 60, 110, 0.1)', // même couleur avec opacité pour le remplissage
         tension: 0.3, // légère courbure des lignes
@@ -111,7 +111,7 @@ block content %}
       }]
     },
     options: {
-    plugins: { legend: { display: false } },
+    plugins: { legend: { display: false } }, // on masque la légende car il n'y a qu'une seule série
     scales: {
         x: {
             ticks: {
@@ -122,7 +122,7 @@ block content %}
                 }
             }
         },
-        y: { beginAtZero: false }
+        y: { beginAtZero: false } // on commence l'axe Y à la valeur minimale des NAV (et non à 0) pour mieux visualiser les variations
     }
   }});
 </script>
